@@ -30,7 +30,7 @@ Nel pannello di configurazione della routine su code.claude.com, aggiungi:
 
 | Variabile | Valore |
 |---|---|
-| `GMAIL_USER` | `you@gmail.com` |
+| `GMAIL_USER` | il tuo indirizzo Gmail |
 | `GMAIL_APP_PASSWORD` | la password a 16 caratteri |
 
 #### 3. Verifica manuale
