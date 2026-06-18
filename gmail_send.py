@@ -14,6 +14,7 @@ Usage:
 import argparse
 import os
 import smtplib
+import socket
 import sys
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -26,7 +27,9 @@ def send(subject: str, html_body: str, sender: str, app_password: str) -> None:
     msg["To"] = sender
     msg.attach(MIMEText(html_body, "html"))
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+    # Resolve to IPv4 explicitly — some container environments lack IPv6 support
+    smtp_ip = socket.getaddrinfo("smtp.gmail.com", 465, socket.AF_INET)[0][4][0]
+    with smtplib.SMTP_SSL(smtp_ip, 465) as server:
         server.login(sender, app_password)
         server.sendmail(sender, sender, msg.as_string())
 
