@@ -61,7 +61,15 @@ python3 gmail_send.py --subject "..." --html "$HTML_BODY"
 
 - Se `GMAIL_APP_PASSWORD` non è settato → lo script esce con errore e la routine
   lo intercetta, creando una bozza via Gmail MCP come fallback.
-- Se SMTP fallisce (rete, credenziali) → logga l'errore nella session log.
+- Se SMTP fallisce (rete, credenziali) → logga l'errore nella session log e invia
+  l'email via connector Gmail MCP (`send_message`) come fallback, così la routine
+  comunque consegna il digest.
+- Nota operativa: nell'ambiente sandbox di Claude Code on the web, `smtplib.SMTP_SSL`
+  fallisce sempre con `OSError: [Errno 97] Address family not supported by protocol`
+  perché le connessioni socket raw in uscita (porta 465) non sono supportate — solo
+  il traffico HTTPS instradato dal proxy dell'agente funziona. In quell'ambiente
+  `gmail_send.py` non potrà mai avere successo: usa direttamente il connector
+  Gmail MCP per l'invio, saltando il tentativo SMTP.
 
 ### File
 
